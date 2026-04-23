@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+tests/out/*.svg
+vendor/*
+!vendor/.gitkeep
+*.mod
+demo.mod
+tracker.mod

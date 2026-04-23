@@ -1,0 +1,91 @@
+/* Tracker TUI — 3-panel: Pattern editor / side panel / log. */
+
+Screen {
+    layout: horizontal;
+    background: rgb(8,8,12);
+    color: rgb(220,220,230);
+}
+
+#main {
+    width: 1fr;
+    height: 100%;
+    padding: 0 1;
+}
+
+#side {
+    width: 34;
+    height: 100%;
+    border-left: heavy rgb(40,40,52);
+    padding: 0 1;
+}
+
+#status_bar {
+    height: 1;
+    content-align: left middle;
+    color: rgb(210,220,240);
+    background: rgb(22,22,32);
+    padding: 0 1;
+}
+
+#channel_strip {
+    height: 4;
+    width: 100%;
+    background: rgb(12,12,18);
+    padding: 0 1;
+}
+
+PatternView {
+    height: 1fr;
+    width: 100%;
+    background: rgb(8,8,12);
+}
+
+#flash {
+    height: 1;
+    content-align: left middle;
+    color: rgb(220,220,220);
+    background: rgb(18,18,24);
+    padding: 0 1;
+}
+
+InstrumentPanel, ControlsPanel {
+    height: auto;
+    width: 100%;
+    padding: 1 1;
+    background: rgb(14,14,20);
+    border: solid rgb(40,40,52);
+    margin-bottom: 1;
+}
+
+InstrumentPanel {
+    height: 20;
+}
+
+#log {
+    height: 1fr;
+    width: 100%;
+    background: rgb(12,12,16);
+    border: solid rgb(40,40,52);
+    color: rgb(190,190,200);
+}
+
+Header {
+    background: rgb(20,20,30);
+    color: rgb(220,220,240);
+}
+
+Footer {
+    background: rgb(20,20,30);
+    color: rgb(180,180,200);
+}
+
+HelpScreen {
+    align: center middle;
+}
+#help-panel {
+    width: 70;
+    height: 28;
+    background: rgb(16,16,24);
+    border: heavy rgb(90,90,120);
+    padding: 1 2;
+}

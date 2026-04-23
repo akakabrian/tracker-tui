@@ -1,0 +1,23 @@
+[project]
+name = "tracker-tui"
+version = "0.1.0"
+description = "Terminal music tracker — step-sequencer for chiptune/module music"
+requires-python = ">=3.10"
+dependencies = [
+    # Textual — cap the major: private _render hook changes bite us.
+    "textual>=0.80,<10",
+    # Audio output. sounddevice speaks to PortAudio which works on
+    # ALSA/PulseAudio/PipeWire via the system backend.
+    "sounddevice>=0.4",
+    "numpy>=1.24",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["tracker_tui"]
+
+[tool.setuptools.package-data]
+tracker_tui = ["tui.tcss"]
