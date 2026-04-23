@@ -347,19 +347,23 @@ class TrackerApp(App):
         Binding("ctrl+q",        "quit", show=False),
     ]
 
-    def __init__(self, module_path: str | None = None, sound: bool = True) -> None:
+    def __init__(self, module_path: str | None = None, sound: bool = True,
+                 empty: bool = False) -> None:
         super().__init__()
+        self._load_error: str | None = None
         if module_path:
             try:
                 self.song = load_mod(module_path)
             except Exception as e:
                 self.song = Song.empty()
                 self._load_error = str(e)
-            else:
-                self._load_error = None
-        else:
+        elif empty:
             self.song = Song.empty()
-            self._load_error = None
+        else:
+            # Default: load the built-in demo so first launch actually
+            # sounds musical instead of silent.
+            from .demo import demo_song
+            self.song = demo_song()
 
         # Cursor state
         self.current_order_idx = 0
@@ -678,5 +682,6 @@ class TrackerApp(App):
             return
 
 
-def run(module_path: str | None = None, sound: bool = True) -> None:
-    TrackerApp(module_path=module_path, sound=sound).run()
+def run(module_path: str | None = None, sound: bool = True,
+        empty: bool = False) -> None:
+    TrackerApp(module_path=module_path, sound=sound, empty=empty).run()

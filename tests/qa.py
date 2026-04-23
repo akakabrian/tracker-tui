@@ -384,6 +384,40 @@ async def s_load_error_nonfatal(app, pilot):
     assert bad._load_error is not None
 
 
+async def s_demo_song_loads(app, pilot):
+    """The built-in demo song must construct and have cells populated."""
+    from tracker_tui.demo import demo_song
+    s = demo_song()
+    assert s.num_channels == 4
+    assert len(s.patterns) >= 1
+    # Some rows must have notes (we wrote bass on ch0 row 0).
+    assert s.patterns[0].rows[0][0].note is not None
+
+
+async def s_demo_synth_makes_sound(app, pilot):
+    """Running the demo through a few ticks must exercise the synth."""
+    from tracker_tui.demo import demo_song
+    s = demo_song()
+    e = AudioEngine(s, sound=False)
+    e.play_from(0, 0)
+    left = np.zeros(2048, dtype=np.float32)
+    right = np.zeros_like(left)
+    # Advance a few ticks
+    for _ in range(20):
+        with e._lock:
+            while True:
+                if e._samples_to_next_tick == 0:
+                    e._on_tick()
+                step = min(left.shape[0], e._samples_to_next_tick)
+                if step == 0:
+                    break
+                e._fill_block(left[:step], right[:step])
+                e._samples_to_next_tick -= step
+                break
+    peak = float(np.max(np.abs(left)))
+    assert peak > 0.01, f"demo song produced silence: peak={peak}"
+
+
 async def s_unknown_key_is_noop(app, pilot):
     """Random non-note non-hex key must not crash."""
     start_row = app.cursor_row
@@ -428,12 +462,16 @@ SCENARIOS: list[Scenario] = [
     Scenario("hex_digit_enters_instrument", s_hex_digit_in_instrument_field),
     Scenario("save_writes_mod", s_save_writes_mod),
     Scenario("load_error_nonfatal", s_load_error_nonfatal),
+    Scenario("demo_song_loads", s_demo_song_loads),
+    Scenario("demo_synth_makes_sound", s_demo_synth_makes_sound),
     Scenario("unknown_key_is_noop", s_unknown_key_is_noop),
 ]
 
 
 async def run_one(scn: Scenario) -> tuple[str, bool, str]:
-    app = TrackerApp(sound=False)
+    # Use empty=True so tests have a predictable (blank) song state.
+    # The default demo song fills cells we'd be asserting on.
+    app = TrackerApp(sound=False, empty=True)
     try:
         async with app.run_test(size=(160, 50)) as pilot:
             await pilot.pause()
