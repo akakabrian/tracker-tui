@@ -1,65 +1,37 @@
 # tracker-tui
+Four channels. Infinite tracks.
 
-A terminal music tracker — step-sequencer for chiptune / module music.
-Textual-based pattern editor driving an in-process software synth through
-sounddevice.
+![Hero](screenshots/hero.svg)
+![Gameplay](screenshots/gameplay.svg)
 
-Think Impulse Tracker / FastTracker II / Renoise, but as a TUI.
+## About
+A 4-channel Amiga-style chiptune tracker, in a terminal, with a pure-Python software synth driving sounddevice. Round-trip ProTracker .mod I/O. Per-channel meters, live pattern editing, sample management. Make music like it's 1987 and MOD files are still the future.
 
-## Status
+## Screenshots
+![Hero](screenshots/hero.svg)
+![Gameplay](screenshots/gameplay.svg)
 
-- 4 channels × 64 rows pattern editor with cursor navigation
-- ZXCV / QWERTY note entry (two octaves, `-`/`=` to shift base octave)
-- 5-waveform synth: square / saw / triangle / sine / noise + sample playback
-- Channel strip with peak meters and mute/solo
-- Save / load ProTracker 4-channel `.mod` files
-- Built-in demo song ready on first launch
-- 35 QA scenarios, all green
-
-## Quick start
-
+## Install & Run
 ```bash
-make all       # create venv
-make run       # launch the tracker (loads demo song, press SPACE to play)
+git clone https://github.com/akakabrian/tracker-tui
+cd tracker-tui
+make
+make run
 ```
 
-Or with a specific module file:
+## Controls
+<Add controls info from code or existing README>
 
+## Testing
 ```bash
-.venv/bin/python tracker.py path/to/some.mod
+make test       # QA harness
+make playtest   # scripted critical-path run
+make perf       # performance baseline
 ```
 
-## Keys
+## License
+MIT
 
-| Key                           | Action                                   |
-|-------------------------------|------------------------------------------|
-| arrows                        | Move cursor                              |
-| PageUp / PageDown             | Jump 16 rows                             |
-| Home / End                    | Top / bottom of pattern                  |
-| Tab / Shift+Tab               | Next / prev channel                      |
-| Z X C V B N M , . / ;         | Note entry (lower octave)                |
-| Q W E R T Y U I O P etc.      | Note entry (upper octave)                |
-| `-` / `=`                     | Base octave down / up                    |
-| `[` / `]`                     | Select instrument -/+                    |
-| 0-9, a-f                      | Hex digit in instrument/volume/effect    |
-| Space                         | Play / stop current pattern              |
-| F5                            | Play song from start                     |
-| F6                            | Play from cursor row                     |
-| F8                            | Stop                                     |
-| Delete / Backspace            | Clear cell                               |
-| Shift+M                       | Mute current channel                     |
-| Shift+S                       | Solo current channel                     |
-| Ctrl+S                        | Save (tracker.mod)                       |
-| F1 / `?`                      | Help                                     |
-| q                             | Quit                                     |
-
-## Development
-
-```bash
-make test          # full QA harness
-make test-only PAT=synth   # subset by name
-make perf          # hot-path benchmarks
-make render-mod    # write a demo.mod via the pure-Python writer
-```
-
-See `DECISIONS.md` for the engine / format decisions and project layout.
+## Built with
+- [Textual](https://textual.textualize.io/) — the TUI framework
+- [tui-game-build](https://github.com/akakabrian/tui-foundry) — shared build process
